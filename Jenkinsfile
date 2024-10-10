@@ -13,11 +13,22 @@ pipeline {
         stage('Start MySQL') {
             steps {
                 script {
-                    // Start MySQL Docker container
-                    sh 'docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_USER=user -e MYSQL_PASSWORD=password -p 3306:3306 -d mysql:8.0'
+                    // Check if a container with the name 'mysql-container' exists
+                    def containerExists = sh(script: "docker ps -a -q -f name=mysql-container", returnStdout: true).trim()
+
+                    if (containerExists) {
+                        // If the container exists but is not running, start it
+                        echo 'MySQL container exists. Starting it if it is stopped...'
+                        sh 'docker start mysql-container'
+                    } else {
+                        // If the container does not exist, create and start a new one
+                        echo 'MySQL container does not exist. Creating and starting a new one...'
+                        sh 'docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_USER=user -e MYSQL_PASSWORD=password -p 3306:3306 -d mysql'
+                    }
                 }
             }
         }
+
 
         stage('Set Permissions') {
             steps {
