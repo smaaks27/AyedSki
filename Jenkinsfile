@@ -8,7 +8,17 @@ pipeline {
                 // Checkout code from the repository
                 git branch: 'master', url: 'https://github.com/smaaks27/AyedSki.git'
             }
-        } 
+        }
+
+        stage('Start MySQL') {
+            steps {
+                script {
+                    // Start MySQL Docker container
+                    sh 'docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=password -e MYSQL_USER=user -e MYSQL_PASSWORD=password -p 3306:3306 -d mysql:8.0'
+                }
+            }
+        }
+
         stage('Set Permissions') {
             steps {
                 dir('gestion-station-ski') {
