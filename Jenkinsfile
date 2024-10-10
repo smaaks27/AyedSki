@@ -8,6 +8,14 @@ pipeline {
                 // Checkout code from the repository
                 git branch: 'master', url: 'https://github.com/smaaks27/AyedSki.git'
             }
+        } 
+        stage('Set Permissions') {
+            steps {
+                dir('gestion-station-ski') {
+                    // Grant execute permission to the mvnw file
+                    sh 'chmod +x mvnw'
+                }
+            }
         }
 
         stage('Build') {
