@@ -10,7 +10,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Checkout code from the repository
-                git branch: 'master', url: 'https://github.com/smaaks27/AyedSki.git'
+                git branch: 'Ayed', url: 'https://github.com/smaaks27/AyedSki.git'
             }
         }
 
