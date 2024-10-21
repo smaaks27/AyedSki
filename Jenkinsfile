@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        // SonarQube environment variables
-        scannerHome = tool 'sonar' // Name of SonarQube installation
-    }
 
     stages {
         stage('Checkout') {
