@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        // SonarQube environment variables
+        scannerHome = tool 'sonar' // Name of SonarQube installation
+    }
 
     stages {
         stage('Checkout') {
@@ -42,6 +46,14 @@ pipeline {
                 // Run unit tests
                 dir('gestion-station-ski') {
                     sh './mvnw test'
+                }
+            }
+        }
+
+         stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-cred') {
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=AyedSki -Dsonar.projectName='AyedSki' -Dsonar.java.binaries=target/classes"
                 }
             }
         }
