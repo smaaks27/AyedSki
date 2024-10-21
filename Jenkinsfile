@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // SonarQube environment variables
-        scannerHome = tool 'sonar' // Name of SonarQube installation
+        SCANNER_HOME = tool 'sonar' // Name of SonarQube installation
     }
 
     stages {
