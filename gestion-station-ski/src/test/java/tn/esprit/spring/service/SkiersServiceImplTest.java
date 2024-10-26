@@ -1,12 +1,10 @@
 package tn.esprit.spring.service;
 
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import tn.esprit.spring.entities.*;
 import tn.esprit.spring.repositories.*;
@@ -14,8 +12,6 @@ import tn.esprit.spring.services.SkierServicesImpl;
 
 import java.time.LocalDate;
 import java.util.Optional;
-import java.util.Set;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.Mockito.*;
@@ -41,11 +37,6 @@ class SkierServicesImplTest {
     @InjectMocks
     private SkierServicesImpl skierServices;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     @Test
     void testRetrieveAllSkiers() {
         // Arrange
@@ -66,6 +57,7 @@ class SkierServicesImplTest {
         Subscription subscription = new Subscription();
         subscription.setStartDate(LocalDate.now());
         subscription.setTypeSub(TypeSubscription.ANNUAL);
+        LocalDate expectedEndDate = LocalDate.now().plusYears(1);
 
         Skier skier = new Skier();
         skier.setSubscription(subscription);
@@ -77,7 +69,7 @@ class SkierServicesImplTest {
 
         // Assert
         assertNotNull(result);
-        assertEquals(LocalDate.now().plusYears(1), result.getSubscription().getEndDate());
+        assertEquals(expectedEndDate, result.getSubscription().getEndDate());
         verify(skierRepository, times(1)).save(skier);
     }
 
@@ -108,9 +100,8 @@ class SkierServicesImplTest {
         Skier skier = new Skier();
         Course course = new Course();
         Registration registration = new Registration();
-        Set<Registration> registrations = new HashSet<>();
-        registrations.add(registration);
-        skier.setRegistrations(registrations);
+        registration.setCourse(course);
+        skier.getRegistrations().add(registration);
 
         when(skierRepository.save(any(Skier.class))).thenReturn(skier);
         when(courseRepository.findById(3L)).thenReturn(Optional.of(course));
@@ -154,6 +145,7 @@ class SkierServicesImplTest {
         // Arrange
         Skier skier = new Skier();
         Piste piste = new Piste();
+        skier.getPistes().add(piste);
 
         when(skierRepository.findById(1L)).thenReturn(Optional.of(skier));
         when(pisteRepository.findById(2L)).thenReturn(Optional.of(piste));
