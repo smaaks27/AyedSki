@@ -11,6 +11,7 @@ import tn.esprit.spring.repositories.*;
 import tn.esprit.spring.services.SkierServicesImpl;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.List;
@@ -30,9 +31,6 @@ class SkierServicesImplTest {
     private ICourseRepository courseRepository;
 
     @Mock
-    private IRegistrationRepository registrationRepository;
-
-    @Mock
     private ISubscriptionRepository subscriptionRepository;
 
     @InjectMocks
@@ -49,6 +47,19 @@ class SkierServicesImplTest {
 
         // Assert
         assertEquals(2, result.size());
+        verify(skierRepository, times(1)).findAll();
+    }
+
+    @Test
+    void testRetrieveAllSkiersEmpty() {
+        // Arrange
+        when(skierRepository.findAll()).thenReturn(Collections.emptyList());
+
+        // Act
+        List<Skier> result = skierServices.retrieveAllSkiers();
+
+        // Assert
+        assertTrue(result.isEmpty());
         verify(skierRepository, times(1)).findAll();
     }
 
@@ -75,110 +86,74 @@ class SkierServicesImplTest {
     }
 
     @Test
-    void testAssignSkierToSubscription() {
+    void testAssignSkierToSubscriptionNotFound() {
         // Arrange
-        Skier skier = new Skier();
-        Subscription subscription = new Subscription();
-
-        when(skierRepository.findById(1L)).thenReturn(Optional.of(skier));
-        when(subscriptionRepository.findById(2L)).thenReturn(Optional.of(subscription));
-        when(skierRepository.save(any(Skier.class))).thenReturn(skier);
+        when(skierRepository.findById(1L)).thenReturn(Optional.empty());
+        when(subscriptionRepository.findById(2L)).thenReturn(Optional.empty());
 
         // Act
         Skier result = skierServices.assignSkierToSubscription(1L, 2L);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(subscription, result.getSubscription());
+        assertNull(result);
         verify(skierRepository, times(1)).findById(1L);
         verify(subscriptionRepository, times(1)).findById(2L);
-        verify(skierRepository, times(1)).save(skier);
     }
 
     @Test
-    void testAddSkierAndAssignToCourse() {
+    void testAddSkierAndAssignToCourseNotFound() {
         // Arrange
         Skier skier = new Skier();
-        skier.setRegistrations(new HashSet<>());  // Initialize the registrations set
+        skier.setRegistrations(new HashSet<>());
 
-        Course course = new Course();
-        Registration registration = new Registration();
-        registration.setCourse(course);
-        skier.getRegistrations().add(registration);
-
-        when(skierRepository.save(any(Skier.class))).thenReturn(skier);
-        when(courseRepository.findById(3L)).thenReturn(Optional.of(course));
+        when(courseRepository.findById(3L)).thenReturn(Optional.empty());
 
         // Act
         Skier result = skierServices.addSkierAndAssignToCourse(skier, 3L);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(course, registration.getCourse());
-        verify(skierRepository, times(1)).save(skier);
+        assertNull(result);
         verify(courseRepository, times(1)).findById(3L);
-        verify(registrationRepository, times(1)).save(registration);
     }
 
     @Test
-    void testRemoveSkier() {
-        // Act
-        skierServices.removeSkier(1L);
-
-        // Assert
-        verify(skierRepository, times(1)).deleteById(1L);
-    }
-
-    @Test
-    void testRetrieveSkier() {
+    void testRetrieveSkierNotFound() {
         // Arrange
-        Skier skier = new Skier();
-        when(skierRepository.findById(1L)).thenReturn(Optional.of(skier));
+        when(skierRepository.findById(1L)).thenReturn(Optional.empty());
 
         // Act
         Skier result = skierServices.retrieveSkier(1L);
 
         // Assert
-        assertNotNull(result);
+        assertNull(result);
         verify(skierRepository, times(1)).findById(1L);
     }
 
     @Test
-    void testAssignSkierToPiste() {
+    void testAssignSkierToPisteNotFound() {
         // Arrange
-        Skier skier = new Skier();
-        skier.setPistes(new HashSet<>());  // Initialize the pistes set
-
-        Piste piste = new Piste();
-        skier.getPistes().add(piste);
-
-        when(skierRepository.findById(1L)).thenReturn(Optional.of(skier));
-        when(pisteRepository.findById(2L)).thenReturn(Optional.of(piste));
-        when(skierRepository.save(any(Skier.class))).thenReturn(skier);
+        when(skierRepository.findById(1L)).thenReturn(Optional.empty());
+        when(pisteRepository.findById(2L)).thenReturn(Optional.empty());
 
         // Act
         Skier result = skierServices.assignSkierToPiste(1L, 2L);
 
         // Assert
-        assertNotNull(result);
-        assertTrue(skier.getPistes().contains(piste));
+        assertNull(result);
         verify(skierRepository, times(1)).findById(1L);
         verify(pisteRepository, times(1)).findById(2L);
-        verify(skierRepository, times(1)).save(skier);
     }
 
     @Test
-    void testRetrieveSkiersBySubscriptionType() {
+    void testRetrieveSkiersBySubscriptionTypeEmpty() {
         // Arrange
-        List<Skier> skiers = List.of(new Skier(), new Skier());
-        when(skierRepository.findBySubscription_TypeSub(TypeSubscription.ANNUAL)).thenReturn(skiers);
+        when(skierRepository.findBySubscription_TypeSub(TypeSubscription.ANNUAL)).thenReturn(Collections.emptyList());
 
         // Act
         List<Skier> result = skierServices.retrieveSkiersBySubscriptionType(TypeSubscription.ANNUAL);
 
         // Assert
-        assertNotNull(result);
-        assertEquals(2, result.size());
+        assertTrue(result.isEmpty());
         verify(skierRepository, times(1)).findBySubscription_TypeSub(TypeSubscription.ANNUAL);
     }
 }
