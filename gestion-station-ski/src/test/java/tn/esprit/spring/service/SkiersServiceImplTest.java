@@ -11,6 +11,7 @@ import tn.esprit.spring.repositories.*;
 import tn.esprit.spring.services.SkierServicesImpl;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.List;
 
@@ -98,6 +99,8 @@ class SkierServicesImplTest {
     void testAddSkierAndAssignToCourse() {
         // Arrange
         Skier skier = new Skier();
+        skier.setRegistrations(new HashSet<>());  // Initialize the registrations set
+
         Course course = new Course();
         Registration registration = new Registration();
         registration.setCourse(course);
@@ -144,6 +147,8 @@ class SkierServicesImplTest {
     void testAssignSkierToPiste() {
         // Arrange
         Skier skier = new Skier();
+        skier.setPistes(new HashSet<>());  // Initialize the pistes set
+
         Piste piste = new Piste();
         skier.getPistes().add(piste);
 
@@ -177,4 +182,3 @@ class SkierServicesImplTest {
         verify(skierRepository, times(1)).findBySubscription_TypeSub(TypeSubscription.ANNUAL);
     }
 }
-
