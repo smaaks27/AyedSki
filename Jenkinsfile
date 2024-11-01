@@ -107,7 +107,7 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'nexus-cred', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                         def NEXUS_GROUP_ID = "tn.esprit.spring"
                         def NEXUS_ARTIFACT_ID = "gestion-station-ski"
-                        def NEXUS_VERSION = "1.0"
+                        def NEXUS_VERSION_NUMBER = "1.0"
                         // Build Docker image with Nexus JAR
                         sh """
                             docker build -t ${DOCKER_IMAGE}:latest \
