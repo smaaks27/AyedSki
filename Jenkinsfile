@@ -9,6 +9,7 @@ pipeline {
         NEXUS_URL = "192.168.50.4:8081"
         NEXUS_REPOSITORY = "AyedSki"
         NEXUS_CREDENTIAL_ID = "nexus-cred"
+        DOCKER_IMAGE = "ayed/spring-boot-app"
     }
 
     stages {
@@ -100,7 +101,51 @@ pipeline {
                 }
             }
         }
+        stage('Docker Build') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'nexus-cred', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                        def NEXUS_GROUP_ID = "tn.esprit.spring"
+                        def NEXUS_ARTIFACT_ID = "gestion-station-ski"
+                        def NEXUS_VERSION = "1.0"
+                        // Build Docker image with Nexus JAR
+                        sh """
+                            docker build -t ${DOCKER_IMAGE}:latest \
+                            --build-arg NEXUS_URL=${NEXUS_PROTOCOL}://${NEXUS_URL} \
+                            --build-arg NEXUS_REPO=${NEXUS_REPOSITORY} \
+                            --build-arg NEXUS_GROUP_ID=${NEXUS_GROUP_ID} \
+                            --build-arg NEXUS_ARTIFACT_ID=${NEXUS_ARTIFACT_ID} \
+                            --build-arg NEXUS_VERSION=${NEXUS_VERSION_NUMBER} \
+                            --build-arg NEXUS_USERNAME=${NEXUS_USERNAME} \
+                            --build-arg NEXUS_PASSWORD=${NEXUS_PASSWORD} \
+                            .
+                        """
+                    }
+                }
+            }
+        }
 
+        stage('Docker Push') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-cred', passwordVariable: 'DOCKER_PASS', usernameVariable: 'DOCKER_USER')]) {
+                        sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    }
+                    sh "docker push ${DOCKER_IMAGE}:latest"
+                }
+            }
+        }
+        stage('Docker Compose Up') {
+            steps {
+                script {
+                    // Pull the latest Docker image
+                    sh "docker pull ${DOCKER_IMAGE}:latest"
+
+                    // Run docker-compose up to start the application
+                    sh "docker-compose up -d"
+                }
+            }
+        }
     }
 
     post {
