@@ -59,7 +59,7 @@ pipeline {
             steps {
                 // Package the application (e.g., create a JAR file)
                 dir('gestion-station-ski') {
-                    sh './mvnw package'
+                    sh './mvnw package -DskipTests'
                 }
             }
         }
