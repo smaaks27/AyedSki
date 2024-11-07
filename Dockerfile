@@ -14,11 +14,8 @@ ARG NEXUS_PASSWORD
 WORKDIR /app
 
 # Download the JAR file from Nexus
-RUN apt-get update && apt-get install -y curl && \
-    GROUP_ID_PATH=$(echo "$NEXUS_GROUP_ID" | sed 's/\\./\\//g') && \
-    curl -u "${NEXUS_USERNAME}:${NEXUS_PASSWORD}" \
-    -o app.jar "${NEXUS_URL}/repository/${NEXUS_REPO}/${GROUP_ID_PATH}/${NEXUS_ARTIFACT_ID}/${NEXUS_VERSION}/${NEXUS_ARTIFACT_ID}-${NEXUS_VERSION}.jar"
-
+RUN apk add --no-cache curl && \
+    curl -o app.jar "$NEXUS_URL/repository/$NEXUS_REPO/$(echo $GROUP_ID | tr . /)/$ARTIFACT_ID/$VERSION/$ARTIFACT_ID-$VERSION.jar"
 # Expose the port your app runs on
 EXPOSE 8080
 
