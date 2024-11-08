@@ -50,7 +50,7 @@ pipeline {
          stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonar', credentialsId: 'sonar-cred') {
-                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=AyedSki -Dsonar.projectName='AyedSki' -Dsonar.java.binaries=gestion-station-ski/target/classes -Dsonar.jacoco.reportPaths=target/site/jacoco/jacoco.xml"
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=AyedSki -Dsonar.projectName='AyedSki' -Dsonar.java.binaries=gestion-station-ski/target/classes -Dsonar.jacoco.reportPaths=gestion-station-ski/target/site/jacoco/jacoco.xml"
                 }
             }
         }
