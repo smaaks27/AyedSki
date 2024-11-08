@@ -11,18 +11,7 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root_password
     networks:
-      - app-network
-
-  mysql-db:
-    image: mysql:5.7
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: stationSki
-    ports:
-      - "3306:3306"
-    networks:
-      - app-network
-
+      - my_custom_network
 networks:
-  app-network:
-    driver: bridge
+  my_custom_network:
+    external: true
