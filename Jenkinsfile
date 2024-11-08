@@ -143,7 +143,7 @@ pipeline {
                     sh "docker pull ${DOCKER_IMAGE}:latest"
 
                     // Run docker-compose up to start the application
-                    sh "docker-compose up -d"
+                    sh "docker compose up -d"
                 }
             }
         }
