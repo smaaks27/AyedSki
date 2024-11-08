@@ -1,6 +1,5 @@
 # Use an official OpenJDK runtime as the base image
-FROM openjdk:17-jdk-slim
-
+FROM openjdk:17-jdk-alpine
 # Set environment variables for Nexus access
 ARG NEXUS_URL
 ARG NEXUS_REPO
