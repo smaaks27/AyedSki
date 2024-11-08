@@ -143,6 +143,7 @@ pipeline {
                     sh "docker pull ${DOCKER_IMAGE}:latest"
 
                     // Run docker-compose up to start the application
+                    sh "docker stop mysql-container"
                     sh "docker compose up -d"
                 }
             }

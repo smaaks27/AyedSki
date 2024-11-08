@@ -9,9 +9,15 @@ services:
       - SPRING_PROFILES_ACTIVE=prod
       - SPRING_DATASOURCE_URL=jdbc:mysql://mysql-db:3306/stationSki
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=root_password
+      - SPRING_DATASOURCE_PASSWORD=password
     networks:
-      - my_custom_network
-networks:
-  my_custom_network:
-    external: true
+      - app-network
+  mysql-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: stationSki
+    ports:
+      - "3306:3306"
+    networks:
+      - app-network
