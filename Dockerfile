@@ -14,9 +14,9 @@ WORKDIR /app
 
 # Download the JAR file from Nexus
 RUN apk add --no-cache curl && \
-    curl -o app.jar "$NEXUS_URL/repository/$NEXUS_REPO/$(echo $GROUP_ID | tr . /)/$ARTIFACT_ID/$VERSION/$ARTIFACT_ID-$VERSION.jar"
+    curl -o app.jar http://192.168.50.4:8081/repository/AyedSki/tn/esprit/spring/gestion-station-ski/1.0/gestion-station-ski-1.0.jar
 # Expose the port your app runs on
-EXPOSE 8080
+EXPOSE 8089
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
