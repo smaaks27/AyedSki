@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   spring-boot-app:
-    image: "${DOCKER_HUB_IMAGE:-your-default-image}" # Image name passed as argument or fallback to default
+    image: "ayed/spring-boot-app" # Image name passed as argument or fallback to default
     ports:
       - "8089:8089"
     environment:
