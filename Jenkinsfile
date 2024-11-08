@@ -9,7 +9,7 @@ pipeline {
         NEXUS_URL = "192.168.50.4:8081"
         NEXUS_REPOSITORY = "AyedSki"
         NEXUS_CREDENTIAL_ID = "nexus-cred"
-        DOCKER_IMAGE = "ayed/spring-boot-app"
+        DOCKER_IMAGE = "smaxxxxx/spring-boot-app"
     }
 
     stages {

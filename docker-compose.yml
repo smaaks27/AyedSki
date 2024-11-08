@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   spring-boot-app:
-    image: "ayed/spring-boot-app" # Image name passed as argument or fallback to default
+    image: "smaxxxxx/spring-boot-app" # Image name passed as argument or fallback to default
     ports:
       - "8089:8089"
     environment:
