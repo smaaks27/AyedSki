@@ -42,7 +42,7 @@ pipeline {
             steps {
                 // Run unit tests
                 dir('gestion-station-ski') {
-                    sh './mvnw test'
+                    sh './mvnw test jacoco:report'
                 }
             }
         }

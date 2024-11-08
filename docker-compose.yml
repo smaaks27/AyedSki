@@ -2,19 +2,9 @@ version: '3.8'
 
 services:
   spring-boot-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        NEXUS_URL: "http://192.168.50.4:8081"  # Nexus URL
-        NEXUS_REPO: "AyedSki"                   # Nexus repository name
-        NEXUS_GROUP_ID: "com.example"           # Replace with your group ID
-        NEXUS_ARTIFACT_ID: "gestion-station-ski" # Replace with your artifact ID
-        NEXUS_VERSION: "1.0.0"                  # Replace with your artifact version
-        NEXUS_USERNAME: "your-nexus-username"   # Replace with Nexus username
-        NEXUS_PASSWORD: "your-nexus-password"   # Replace with Nexus password
+    image: "${DOCKER_HUB_IMAGE:-your-default-image}" # Image name passed as argument or fallback to default
     ports:
-      - "8080:8080"
+      - "8089:8089"
     environment:
       - SPRING_PROFILES_ACTIVE=prod
     networks:
